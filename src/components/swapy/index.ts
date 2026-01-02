@@ -1,3 +1,2 @@
 export { Container } from "./container";
-export { Handle } from "./handle";
-export { Item } from "./item";
+export { Handle, Item, Slot } from "./utils";

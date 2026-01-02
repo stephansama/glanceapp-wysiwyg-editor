@@ -17,19 +17,20 @@ export function useContainer() {
 
 export function Container({
   children,
+  config = {},
   onBeforeSwap,
   onSwap,
-  onSwapStart,
   onSwapEnd,
-  config,
+  onSwapStart,
   ...props
 }: {
   children: React.ReactElement;
+  className?: string;
   config?: Partial<Config>;
   onBeforeSwap?: () => boolean;
-  onSwapStart?: () => void;
   onSwap?: () => void;
   onSwapEnd?: () => void;
+  onSwapStart?: () => void;
 }) {
   const swapyRef = React.useRef<Swapy | null>(null);
   const containerRef = React.useRef<HTMLDivElement | null>(null);

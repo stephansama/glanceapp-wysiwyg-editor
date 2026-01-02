@@ -1,0 +1,75 @@
+import { merge } from "es-toolkit/compat";
+import * as React from "react";
+
+import type { GlobalSchema, PageSchema } from "@/lib/schema";
+
+export type EditorActions =
+  | { type: "CLEAR_ALL_PAGE"; payload: { id: number } }
+  | { type: "REMOVE_PAGE"; payload: { slug: string } }
+  | {
+      type: "ADD_PAGE";
+      payload: { name: string; columns?: PageSchema["columns"] };
+    };
+
+export type EditorState = GlobalSchema;
+
+export const EditorContext = React.createContext<{
+  state: EditorState;
+  dispatch: React.ActionDispatch<[action: EditorActions]>;
+} | null>(null);
+
+const defaultState = {
+  pages: [],
+} satisfies EditorState;
+
+export function useEditor() {
+  const context = React.useContext(EditorContext);
+  if (!context) {
+    throw new Error("useEditor must be called within an EditorProvider");
+  }
+
+  return context;
+}
+
+export function EditorProvider({
+  children,
+  initialState: initial,
+}: {
+  children: React.ReactElement;
+  initialState: Partial<EditorState>;
+}) {
+  const initialState = merge(initial, defaultState);
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+
+  React.useEffect(() => {
+    console.log(state);
+  }, [state]);
+
+  return (
+    <EditorContext.Provider value={{ state, dispatch }}>
+      {children}
+    </EditorContext.Provider>
+  );
+}
+
+function reducer(state: EditorState, action: EditorActions): EditorState {
+  switch (action.type) {
+    case "ADD_PAGE":
+      return {
+        ...state,
+        pages: [
+          ...state.pages,
+          { name: action.payload.name, columns: action.payload.columns || [] },
+        ],
+      };
+    case "CLEAR_ALL_PAGE":
+      return { ...state, pages: [] };
+    case "REMOVE_PAGE":
+      return {
+        ...state,
+        pages: state.pages.filter((page) => page.slug !== action.payload.slug),
+      };
+    default:
+      throw new Error("action not defined");
+  }
+}

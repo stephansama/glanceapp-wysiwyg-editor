@@ -15,9 +15,7 @@ export const { useAppForm } = createFormHook({
     Select,
     TextArea,
   },
-  formComponents: {
-    SubscribeButton,
-  },
+  formComponents: { SubscribeButton },
   fieldContext,
   formContext,
 });
