@@ -1,56 +1,56 @@
-import { Link } from '@tanstack/react-router'
+import { Link } from "@tanstack/react-router";
 
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
+} from "@/components/ui/tooltip";
 import {
   DownloadIcon,
   HelpCircleIcon,
   LucideSquareArrowOutUpRight,
   Menu,
   SettingsIcon,
-} from 'lucide-react'
-import * as React from 'react'
+} from "lucide-react";
+import * as React from "react";
 
-const title = 'Glance WYSIWIG Editor'
+const title = "Glance WYSIWIG Editor";
 
 const actions = {
   help: {
-    description: 'open up glance documentation',
+    description: "open up glance documentation",
     onClick: () => {},
     Icon: HelpCircleIcon,
   },
   import: {
-    description: 'import previous dashboard',
+    description: "import previous dashboard",
     onClick: () => {},
     Icon: DownloadIcon,
   },
   export: {
-    description: 'export current dashboard',
+    description: "export current dashboard",
     onClick: () => {},
     Icon: LucideSquareArrowOutUpRight,
   },
   settings: {
-    description: 'settings for glance WYSIWIG',
+    description: "settings for glance WYSIWIG",
     Icon: SettingsIcon,
     onClick: () => {},
   },
 } satisfies Record<
   string,
   Partial<{
-    description: string
-    onClick: () => void
-    Icon: Omit<React.ForwardedRef<React.ReactElement>, 'ref'>
+    description: string;
+    onClick: () => void;
+    Icon: Omit<React.ForwardedRef<React.ReactElement>, "ref">;
   }>
->
+>;
 
 export default function Header() {
-  const [isOpen, setIsOpen] = React.useState(false)
+  const [isOpen, setIsOpen] = React.useState(false);
   const [groupedExpanded, setGroupedExpanded] = React.useState<
     Record<string, boolean>
-  >({})
+  >({});
 
   return (
     <>
@@ -90,5 +90,5 @@ export default function Header() {
         </div>
       </header>
     </>
-  )
+  );
 }

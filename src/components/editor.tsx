@@ -1,13 +1,14 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { createSwapy, type Swapy } from "swapy"
+import * as React from "react";
+import { createSwapy, type Swapy } from "swapy";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 export function Editor() {
-  const swapyRef = React.useRef<Swapy | null>(null)
-  const containerRef = React.useRef<HTMLDivElement | null>(null)
+  const swapyRef = React.useRef<Swapy | null>(null);
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
+
   React.useEffect(() => {
     if (containerRef.current) {
       swapyRef.current = createSwapy(containerRef.current, {
@@ -17,40 +18,38 @@ export function Editor() {
         // enabled: true,
         // dragAxis: 'x',
         // dragOnHold: true
-      })
+      });
 
       // swapyRef.current.enable(false)
       // swapyRef.current.destroy()
       // console.log(swapyRef.current.slotItemMap())
 
       swapyRef.current.onBeforeSwap((event) => {
-        console.log("beforeSwap", event)
-        // This is for dynamically enabling and disabling swapping.
-        // Return true to allow swapping, and return false to prevent swapping.
-        return true
-      })
+        console.log("beforeSwap", event);
+        return true;
+      });
 
       swapyRef.current.onSwapStart((event) => {
-        console.log("start", event)
-      })
+        console.log("start", event);
+      });
       swapyRef.current.onSwap((event) => {
-        console.log("swap", event)
-      })
+        console.log("swap", event);
+      });
       swapyRef.current.onSwapEnd((event) => {
-        console.log("end", event)
-      })
+        console.log("end", event);
+      });
     }
     return () => {
-      swapyRef.current?.destroy()
-    }
-  }, [])
+      swapyRef.current?.destroy();
+    };
+  }, []);
 
   return (
     <div
-      className={cn("w-full max-w-200 flex flex-col gap-2 mx-auto")}
+      className={cn("w-full max-w-200 grid grid-cols-12 gap-2 mx-auto")}
       ref={containerRef}
     >
-      <div className="h-50" data-swapy-slot="a">
+      <div className="col-span-3" data-swapy-slot="a">
         <div
           className="rounded-md flex flex-col items-center justify-center size-full bg-green-700"
           data-swapy-item="a"
@@ -58,7 +57,7 @@ export function Editor() {
           <div>A</div>
         </div>
       </div>
-      <div className="flex gap-4 h-60">
+      <div className="col-span-6">
         <div className="flex-1 h-full" data-swapy-slot="b">
           <div
             className="rounded-md flex flex-col has-[data-swapy-highlighted]:bg-white items-center justify-center size-full bg-green-700 relative"
@@ -74,16 +73,15 @@ export function Editor() {
             <div>B</div>
           </div>
         </div>
-        <div className="flex-2 h-full" data-swapy-slot="c"></div>
       </div>
-      <div className="h-40" data-swapy-slot="d">
+      <div className="col-span-3" data-swapy-slot="d">
         <div
-          className="rounded-md flex flex-col items-center justify-center size-full bg-green-700"
+          className="rounded-md h-40 flex flex-col items-center justify-center size-full bg-green-700"
           data-swapy-item="d"
         >
           <div>D</div>
         </div>
       </div>
     </div>
-  )
+  );
 }

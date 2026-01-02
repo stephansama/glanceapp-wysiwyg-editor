@@ -1,4 +1,4 @@
-import { createFormHook } from '@tanstack/react-form'
+import { createFormHook } from "@tanstack/react-form";
 
 import {
   Select,
@@ -7,7 +7,7 @@ import {
   TextField,
   fieldContext,
   formContext,
-} from '@/components/form'
+} from "@/components/form";
 
 export const { useAppForm } = createFormHook({
   fieldComponents: {
@@ -20,4 +20,4 @@ export const { useAppForm } = createFormHook({
   },
   fieldContext,
   formContext,
-})
+});
