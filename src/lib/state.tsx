@@ -9,13 +9,16 @@ export const EDITOR_LOCAL_STORAGEKEY = "state";
 
 export type EditorActions =
   | { type: "CLEAR_ALL_PAGE"; payload: { id: number } }
+  | { type: "SET_FILE_DROPOVER"; payload: { state: boolean } }
   | { type: "REMOVE_PAGE"; payload: { name: string } }
   | {
       type: "ADD_PAGE";
       payload: { name: string; columns?: PageSchema["columns"] };
     };
 
-export type EditorState = GlobalSchema;
+export type EditorState = GlobalSchema & {
+  showFileImportDropover: boolean;
+};
 
 export const EditorContext = React.createContext<{
   state: EditorState;
@@ -24,6 +27,7 @@ export const EditorContext = React.createContext<{
 
 const defaultState = {
   pages: [],
+  showFileImportDropover: false,
 } satisfies EditorState;
 
 export function useEditor() {
@@ -39,7 +43,7 @@ export function EditorProvider({
   children,
   initialState: initial,
 }: {
-  children: React.ReactElement;
+  children: React.ReactElement | Array<React.ReactElement>;
   initialState: Partial<EditorState>;
 }) {
   const initialState = merge(initial, defaultState);
@@ -63,6 +67,11 @@ export function EditorProvider({
 
 function reducer(state: EditorState, action: EditorActions): EditorState {
   switch (action.type) {
+    case "SET_FILE_DROPOVER":
+      return {
+        ...state,
+        showFileImportDropover: action.payload.state,
+      };
     case "ADD_PAGE":
       return {
         ...state,

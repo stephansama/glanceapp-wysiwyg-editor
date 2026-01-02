@@ -32,7 +32,11 @@ export const Route = createRootRoute({
     <>
       <NuqsAdapter>
         <EditorProvider initialState={{}}>
-          <Outlet />
+          <Header />
+          <main>
+            <Outlet />
+          </main>
+          <Footer />
         </EditorProvider>
       </NuqsAdapter>
     </>
@@ -46,9 +50,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        {children}
         <TanStackDevtools
           config={{ position: "bottom-right" }}
           plugins={[

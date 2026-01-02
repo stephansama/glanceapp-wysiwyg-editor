@@ -14,6 +14,21 @@ import {
 } from "@/components/ui/dialog";
 import { useAppForm } from "@/lib/form";
 
+export type TimeZoneSchema = z.input<typeof timeZoneSchema>;
+export const timeZoneSchema = z.object({
+  label: z.string(),
+  timezone: z.string(),
+});
+
+export type ClockSchema = z.input<typeof clockSchema>;
+export const clockSchema = z
+  .object({
+    hourFormat: z.enum(["24h", "12h"]),
+    timezones: z.array(timeZoneSchema),
+    type: z.literal("clock"),
+  })
+  .transform((schema) => ({ ...schema, ["hour-format"]: schema.hourFormat }));
+
 const formSchema = z.object({
   title: z
     .string()

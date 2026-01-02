@@ -1,8 +1,11 @@
 "use client";
 
+import { useClickAway } from "@uidotdev/usehooks";
 import { X } from "lucide-react";
 import { useQueryState } from "nuqs";
 import * as React from "react";
+
+import { Dropover } from "./dropover";
 
 import { Page } from "@/components/page";
 import { Container, Item, Slot, useContainer } from "@/components/swapy";
@@ -13,10 +16,11 @@ import { useEditor } from "@/lib/state";
 function CloseButton({ name }: { name: string }) {
   const { state, dispatch } = useEditor();
   const container = useContainer();
+
   React.useEffect(() => {
-    console.log(container.swapy);
     container.swapy?.update();
   }, [state.pages]);
+
   return (
     <Button
       onClick={() => {
@@ -88,5 +92,46 @@ function Content() {
 }
 
 export function Editor() {
-  return <Content />;
+  return (
+    <EditorDropover>
+      <Content />
+    </EditorDropover>
+  );
+}
+
+function EditorDropover({ children }: { children: React.ReactElement }) {
+  const { state, dispatch } = useEditor();
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const clickAwayRef = useClickAway<HTMLDivElement>(() => {
+    dispatch({ type: "SET_FILE_DROPOVER", payload: { state: false } });
+  });
+
+  React.useEffect(() => {
+    containerRef.current?.addEventListener("dragover", () => {
+      dispatch({ type: "SET_FILE_DROPOVER", payload: { state: true } });
+    });
+    containerRef.current?.addEventListener("dragleave", () => {
+      dispatch({ type: "SET_FILE_DROPOVER", payload: { state: false } });
+    });
+  }, []);
+
+  return (
+    <div className="relative h-full" ref={containerRef}>
+      {children}
+      {state.showFileImportDropover && (
+        <div className="fixed inset-0 justify-center items-center flex">
+          <div ref={clickAwayRef}>
+            <Dropover
+              onDrop={() => {
+                dispatch({
+                  type: "SET_FILE_DROPOVER",
+                  payload: { state: false },
+                });
+              }}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
