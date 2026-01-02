@@ -20,7 +20,7 @@ export function Export({ children, commonStyles }: CommonActionProps) {
     <Dialog>
       <form>
         <DialogTrigger className={cn(commonStyles)}>{children}</DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-100">
           <DialogHeader>
             <DialogTitle>Edit profile</DialogTitle>
             <DialogDescription>
@@ -48,5 +48,4 @@ export function Export({ children, commonStyles }: CommonActionProps) {
       </form>
     </Dialog>
   );
-  // return <div className={cn(commonStyles, "")}>{children}</div>;
 }

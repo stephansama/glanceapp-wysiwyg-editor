@@ -11,7 +11,6 @@ import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import appDarkmode from "@/darkmode.js?url";
-import { EditorProvider } from "@/lib/state";
 import appCss from "@/styles.css?url";
 
 export const Route = createRootRoute({
@@ -31,13 +30,11 @@ export const Route = createRootRoute({
   component: () => (
     <>
       <NuqsAdapter>
-        <EditorProvider initialState={{}}>
-          <Header />
-          <main>
-            <Outlet />
-          </main>
-          <Footer />
-        </EditorProvider>
+        <Header />
+        <main>
+          <Outlet />
+        </main>
+        <Footer />
       </NuqsAdapter>
     </>
   ),

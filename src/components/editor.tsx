@@ -1,7 +1,7 @@
 "use client";
 
 import { useClickAway } from "@uidotdev/usehooks";
-import { X } from "lucide-react";
+import { Redo, Undo, X } from "lucide-react";
 import { useQueryState } from "nuqs";
 import * as React from "react";
 
@@ -11,10 +11,10 @@ import { Page } from "@/components/page";
 import { Container, Item, Slot, useContainer } from "@/components/swapy";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEditor } from "@/lib/state";
+import { useEditorState, useFileImportDropover } from "@/lib/state";
 
 function CloseButton({ name }: { name: string }) {
-  const { state, dispatch } = useEditor();
+  const state = useEditorState();
   const container = useContainer();
 
   React.useEffect(() => {
@@ -24,10 +24,7 @@ function CloseButton({ name }: { name: string }) {
   return (
     <Button
       onClick={() => {
-        dispatch({
-          type: "REMOVE_PAGE",
-          payload: { name },
-        });
+        state.removePage(name);
       }}
     >
       <X />
@@ -36,7 +33,7 @@ function CloseButton({ name }: { name: string }) {
 }
 
 function Content() {
-  const { state, dispatch } = useEditor();
+  const state = useEditorState();
   const firstPageName = state.pages.at(0)?.name;
   const [selected, setSelected] = useQueryState("page");
 
@@ -66,11 +63,9 @@ function Content() {
         </Container>
         <Button
           onClick={() =>
-            dispatch({
-              type: "ADD_PAGE",
-              payload: {
-                name: "name" + state.pages.length,
-              },
+            state.addPage({
+              columns: [],
+              name: `name${state.pages.length}`,
             })
           }
         >
@@ -91,27 +86,51 @@ function Content() {
   );
 }
 
+function Toolbar() {
+  const { undo, redo, pastStates, futureStates } =
+    useEditorState.temporal.getState();
+
+  const canUndo = pastStates.length > 0;
+  const canRedo = futureStates.length > 0;
+
+  return (
+    <div className="my-2">
+      <Button onClick={() => undo()} disabled={canUndo}>
+        <Undo />
+      </Button>
+      <Button onClick={() => redo()} disabled={canRedo}>
+        <Redo />
+      </Button>
+    </div>
+  );
+}
+
 export function Editor() {
   return (
     <EditorDropover>
+      <Toolbar />
       <Content />
     </EditorDropover>
   );
 }
 
-function EditorDropover({ children }: { children: React.ReactElement }) {
-  const { state, dispatch } = useEditor();
+function EditorDropover({
+  children,
+}: {
+  children: React.ReactElement | Array<React.ReactElement>;
+}) {
+  const state = useFileImportDropover();
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const clickAwayRef = useClickAway<HTMLDivElement>(() => {
-    dispatch({ type: "SET_FILE_DROPOVER", payload: { state: false } });
+    state.setFileDropoverVisibilty(false);
   });
 
   React.useEffect(() => {
     containerRef.current?.addEventListener("dragover", () => {
-      dispatch({ type: "SET_FILE_DROPOVER", payload: { state: true } });
+      state.setFileDropoverVisibilty(true);
     });
     containerRef.current?.addEventListener("dragleave", () => {
-      dispatch({ type: "SET_FILE_DROPOVER", payload: { state: false } });
+      state.setFileDropoverVisibilty(false);
     });
   }, []);
 
@@ -123,10 +142,7 @@ function EditorDropover({ children }: { children: React.ReactElement }) {
           <div ref={clickAwayRef}>
             <Dropover
               onDrop={() => {
-                dispatch({
-                  type: "SET_FILE_DROPOVER",
-                  payload: { state: false },
-                });
+                state.setFileDropoverVisibilty(false);
               }}
             />
           </div>
