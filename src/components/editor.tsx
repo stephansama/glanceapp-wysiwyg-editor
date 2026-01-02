@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { createSwapy, type Swapy } from "swapy";
+import type { Swapy } from "swapy";
+import { createSwapy } from "swapy";
 
 import { cn } from "@/lib/utils";
 
