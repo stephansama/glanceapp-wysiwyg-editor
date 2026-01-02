@@ -1,11 +1,35 @@
 "use client";
 
+import { X } from "lucide-react";
 import { useQueryState } from "nuqs";
+import * as React from "react";
 
 import { Page } from "@/components/page";
+import { Container, Item, Slot, useContainer } from "@/components/swapy";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { EditorProvider, useEditor } from "@/lib/state";
+import { useEditor } from "@/lib/state";
+
+function CloseButton({ name }: { name: string }) {
+  const { state, dispatch } = useEditor();
+  const container = useContainer();
+  React.useEffect(() => {
+    console.log(container.swapy);
+    container.swapy?.update();
+  }, [state.pages]);
+  return (
+    <Button
+      onClick={() => {
+        dispatch({
+          type: "REMOVE_PAGE",
+          payload: { name },
+        });
+      }}
+    >
+      <X />
+    </Button>
+  );
+}
 
 function Content() {
   const { state, dispatch } = useEditor();
@@ -19,17 +43,23 @@ function Content() {
       className="w-full"
     >
       <TabsList>
-        {state.pages.map((page) => (
-          <TabsTrigger
-            key={page.name}
-            onClick={(_) => {
-              setSelected(page.name);
-            }}
-            value={page.name}
-          >
-            {page.name}
-          </TabsTrigger>
-        ))}
+        <Container className="flex items-center gap-2">
+          {state.pages.map((page) => (
+            <Slot swapyKey={page.name} key={page.name}>
+              <Item swapyKey={page.name}>
+                <TabsTrigger
+                  onClick={(_) => {
+                    setSelected(page.name);
+                  }}
+                  value={page.name}
+                >
+                  {page.name}
+                </TabsTrigger>
+                <CloseButton name={page.name} />
+              </Item>
+            </Slot>
+          ))}
+        </Container>
         <Button
           onClick={() =>
             dispatch({
@@ -58,9 +88,5 @@ function Content() {
 }
 
 export function Editor() {
-  return (
-    <EditorProvider initialState={{}}>
-      <Content />
-    </EditorProvider>
-  );
+  return <Content />;
 }

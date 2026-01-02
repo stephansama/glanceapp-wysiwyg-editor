@@ -12,7 +12,7 @@ export function useContainer() {
     throw new Error("must use container within a container context");
   }
 
-  return containerContext;
+  return context;
 }
 
 export function Container({
@@ -24,7 +24,7 @@ export function Container({
   onSwapStart,
   ...props
 }: {
-  children: React.ReactElement;
+  children: React.ReactElement | Array<React.ReactElement>;
   className?: string;
   config?: Partial<Config>;
   onBeforeSwap?: () => boolean;
@@ -50,15 +50,8 @@ export function Container({
     };
   }, []);
 
-  const value = React.useMemo(
-    () => ({
-      swapy: swapyRef.current,
-    }),
-    [],
-  );
-
   return (
-    <containerContext.Provider value={value}>
+    <containerContext.Provider value={{ swapy: swapyRef.current }}>
       <div {...props} ref={containerRef}>
         {children}
       </div>

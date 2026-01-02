@@ -9,7 +9,7 @@ export const EDITOR_LOCAL_STORAGEKEY = "state";
 
 export type EditorActions =
   | { type: "CLEAR_ALL_PAGE"; payload: { id: number } }
-  | { type: "REMOVE_PAGE"; payload: { slug: string } }
+  | { type: "REMOVE_PAGE"; payload: { name: string } }
   | {
       type: "ADD_PAGE";
       payload: { name: string; columns?: PageSchema["columns"] };
@@ -76,7 +76,7 @@ function reducer(state: EditorState, action: EditorActions): EditorState {
     case "REMOVE_PAGE":
       return {
         ...state,
-        pages: state.pages.filter((page) => page.slug !== action.payload.slug),
+        pages: state.pages.filter((page) => page.name !== action.payload.name),
       };
     default:
       throw new Error("action not defined");

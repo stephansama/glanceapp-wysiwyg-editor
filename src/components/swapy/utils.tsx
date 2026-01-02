@@ -1,10 +1,12 @@
 import * as React from "react";
 
+type Children = React.ReactElement | Array<React.ReactElement>;
+
 export function Handle({
   children,
   ...props
 }: {
-  children: React.ReactElement;
+  children: Children;
   className?: string;
 }) {
   return (
@@ -19,7 +21,7 @@ export function Item({
   swapyKey: key,
   ...props
 }: {
-  children: React.ReactElement;
+  children: Children;
   className?: string;
   swapyKey: string;
 }) {
@@ -35,7 +37,7 @@ export function Slot({
   swapyKey: key,
   ...props
 }: {
-  children: React.ReactElement;
+  children: Children;
   className?: string;
   swapyKey: string;
 }) {

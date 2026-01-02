@@ -9,8 +9,9 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 
 import { Footer } from "@/components/footer";
-import Navbar from "@/components/navbar";
+import { Header } from "@/components/header";
 import appDarkmode from "@/darkmode.js?url";
+import { EditorProvider } from "@/lib/state";
 import appCss from "@/styles.css?url";
 
 export const Route = createRootRoute({
@@ -30,7 +31,9 @@ export const Route = createRootRoute({
   component: () => (
     <>
       <NuqsAdapter>
-        <Outlet />
+        <EditorProvider initialState={{}}>
+          <Outlet />
+        </EditorProvider>
       </NuqsAdapter>
     </>
   ),
@@ -43,7 +46,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <Navbar />
+        <Header />
         <main>{children}</main>
         <Footer />
         <TanStackDevtools
