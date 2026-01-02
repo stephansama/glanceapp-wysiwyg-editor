@@ -1,5 +1,7 @@
 "use client";
 
+import { useQueryState } from "nuqs";
+
 import { Page } from "@/components/page";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,11 +9,26 @@ import { EditorProvider, useEditor } from "@/lib/state";
 
 function Content() {
   const { state, dispatch } = useEditor();
+  const firstPageName = state.pages.at(0)?.name;
+  const [selected, setSelected] = useQueryState("page");
+
   return (
-    <Tabs defaultValue="account" className="w-full">
+    <Tabs
+      value={selected || firstPageName}
+      defaultValue={firstPageName}
+      className="w-full"
+    >
       <TabsList>
         {state.pages.map((page) => (
-          <TabsTrigger value={page.name}>{page.name}</TabsTrigger>
+          <TabsTrigger
+            key={page.name}
+            onClick={(_) => {
+              setSelected(page.name);
+            }}
+            value={page.name}
+          >
+            {page.name}
+          </TabsTrigger>
         ))}
         <Button
           onClick={() =>
@@ -26,6 +43,11 @@ function Content() {
           add
         </Button>
       </TabsList>
+      {state.pages.map((page) => (
+        <TabsContent key={page.name} value={page.name}>
+          {page.name}
+        </TabsContent>
+      ))}
       <TabsContent value="name0">
         <Page />
         Make changes to your account here.

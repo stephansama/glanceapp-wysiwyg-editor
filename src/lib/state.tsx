@@ -1,7 +1,11 @@
+"use client";
+
 import { merge } from "es-toolkit/compat";
 import * as React from "react";
 
 import type { GlobalSchema, PageSchema } from "@/lib/schema";
+
+export const EDITOR_LOCAL_STORAGEKEY = "state";
 
 export type EditorActions =
   | { type: "CLEAR_ALL_PAGE"; payload: { id: number } }
@@ -39,10 +43,15 @@ export function EditorProvider({
   initialState: Partial<EditorState>;
 }) {
   const initialState = merge(initial, defaultState);
-  const [state, dispatch] = React.useReducer(reducer, initialState);
+  const [state, dispatch] = React.useReducer(reducer, initialState, () => {
+    if (typeof window === "undefined") return initialState;
+    const stored = window.localStorage.getItem(EDITOR_LOCAL_STORAGEKEY);
+    return stored ? JSON.parse(stored) : initialState;
+  });
 
   React.useEffect(() => {
-    console.log(state);
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem("state", JSON.stringify(state));
   }, [state]);
 
   return (
