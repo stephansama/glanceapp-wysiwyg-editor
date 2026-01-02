@@ -8,6 +8,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { NuqsAdapter } from "nuqs/adapters/tanstack-router";
 
+import { Footer } from "@/components/footer";
 import Navbar from "@/components/navbar";
 import appDarkmode from "@/darkmode.js?url";
 import appCss from "@/styles.css?url";
@@ -44,6 +45,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <Navbar />
         <main>{children}</main>
+        <Footer />
         <TanStackDevtools
           config={{ position: "bottom-right" }}
           plugins={[
