@@ -4,30 +4,22 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 import Header from '../components/Header'
 
+import appDarkmode from '../darkmode.js?url'
 import appCss from '../styles.css?url'
 
 export const Route = createRootRoute({
   head: () => ({
+    scripts: [{ src: appDarkmode }],
     meta: [
-      {
-        charSet: 'utf-8',
-      },
+      { charSet: 'utf-8' },
       {
         name: 'viewport',
         content: 'width=device-width, initial-scale=1',
       },
-      {
-        title: 'TanStack Start Starter',
-      },
+      { title: 'TanStack Start Starter' },
     ],
-    links: [
-      {
-        rel: 'stylesheet',
-        href: appCss,
-      },
-    ],
+    links: [{ rel: 'stylesheet', href: appCss }],
   }),
-
   shellComponent: RootDocument,
 })
 
