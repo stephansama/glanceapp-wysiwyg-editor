@@ -3,7 +3,7 @@
 import * as React from "react"
 import { createSwapy, type Swapy } from "swapy"
 
-import "@/swappy.css"
+import { cn } from "@/lib/utils"
 
 export function Editor() {
   const swapyRef = React.useRef<Swapy | null>(null)
@@ -46,23 +46,41 @@ export function Editor() {
   }, [])
 
   return (
-    <div className="container" ref={containerRef}>
-      <div className="slot top" data-swapy-slot="a">
-        <div className="item item-a" data-swapy-item="a">
+    <div
+      className={cn("w-full max-w-200 flex flex-col gap-2 mx-auto")}
+      ref={containerRef}
+    >
+      <div className="h-50" data-swapy-slot="a">
+        <div
+          className="rounded-md flex flex-col items-center justify-center size-full bg-green-700"
+          data-swapy-item="a"
+        >
           <div>A</div>
         </div>
       </div>
-      <div className="middle">
-        <div className="slot middle-left" data-swapy-slot="b">
-          <div className="item item-b" data-swapy-item="b">
-            <div className="handle" data-swapy-handle></div>
+      <div className="flex gap-4 h-60">
+        <div className="flex-1 h-full" data-swapy-slot="b">
+          <div
+            className="rounded-md flex flex-col has-[data-swapy-highlighted]:bg-white items-center justify-center size-full bg-green-700 relative"
+            data-swapy-item="b"
+          >
+            <div data-swapy-handle>
+              <img
+                className="cursor-grab size-6 opacity-50 absolute top-4 left-4"
+                src="https://api.iconify.design/formkit:draghandle.svg"
+                alt=""
+              />
+            </div>
             <div>B</div>
           </div>
         </div>
-        <div className="slot middle-right" data-swapy-slot="c"></div>
+        <div className="flex-2 h-full" data-swapy-slot="c"></div>
       </div>
-      <div className="slot bottom" data-swapy-slot="d">
-        <div className="item item-d" data-swapy-item="d">
+      <div className="h-40" data-swapy-slot="d">
+        <div
+          className="rounded-md flex flex-col items-center justify-center size-full bg-green-700"
+          data-swapy-item="d"
+        >
           <div>D</div>
         </div>
       </div>
