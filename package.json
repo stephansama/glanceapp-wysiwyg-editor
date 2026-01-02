@@ -17,13 +17,12 @@
       "prettier-plugin-jsdoc",
       "prettier-plugin-organize-imports"
     ],
+    "quoteProps": "consistent",
     "semi": false,
-    "singleQuote": true,
+    "singleQuote": false,
     "trailingComma": "all"
   },
   "dependencies": {
-    "@dnd-kit/sortable": "^10.0.0",
-    "@dnd-kit/utilities": "^3.2.2",
     "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-slider": "^1.3.6",
@@ -53,6 +52,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "streamdown": "^1.6.5",
+    "swapy": "^1.0.5",
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.0.6",
     "tw-animate-css": "^1.3.6",
