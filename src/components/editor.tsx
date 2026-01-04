@@ -5,10 +5,17 @@ import { Redo, Undo, X } from "lucide-react";
 import { useQueryState } from "nuqs";
 import * as React from "react";
 
+import { AddPageForm } from "./add-page";
 import { Dropover } from "./dropover";
 
 import { Page } from "@/components/page";
-import { Container, Item, Slot, useContainer } from "@/components/swapy";
+import {
+  Container,
+  Item,
+  ManagedSlot,
+  Slot,
+  useContainer,
+} from "@/components/swapy";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEditorState, useFileImportDropover } from "@/lib/state";
@@ -36,41 +43,46 @@ function Content() {
   const state = useEditorState();
   const firstPageName = state.pages.at(0)?.name;
   const [selected, setSelected] = useQueryState("page");
+  const initialValue = selected || firstPageName;
+
+  React.useEffect(() => {
+    console.log(state.pages);
+  }, [state.pages]);
 
   return (
-    <Tabs
-      value={selected || firstPageName}
-      defaultValue={firstPageName}
-      className="w-full"
-    >
+    <Tabs value={initialValue} defaultValue={initialValue} className="w-full">
       <TabsList>
-        <Container className="flex items-center gap-2">
-          {state.pages.map((page) => (
-            <Slot swapyKey={page.name} key={page.name}>
-              <Item swapyKey={page.name}>
-                <TabsTrigger
-                  onClick={(_) => {
-                    setSelected(page.name);
-                  }}
-                  value={page.name}
-                >
-                  {page.name}
-                </TabsTrigger>
-                <CloseButton name={page.name} />
-              </Item>
-            </Slot>
-          ))}
-        </Container>
-        <Button
-          onClick={() =>
-            state.addPage({
-              columns: [],
-              name: `name${state.pages.length}`,
-            })
-          }
+        <Container
+          className="flex items-center gap-2"
+          config={{ manualSwap: true, dragAxis: "x" }}
         >
-          add
-        </Button>
+          <ManagedSlot
+            className="flex items-center"
+            items={state.pages}
+            idField="name"
+            updateItems={(items) => {
+              state.updatePages(items);
+            }}
+          >
+            {/* @ts-expect-error is right */}
+            {({ slotId, item, itemId }) => (
+              <Slot swapyKey={slotId} key={slotId}>
+                <Item swapyKey={itemId}>
+                  <TabsTrigger
+                    onClick={(_) => {
+                      setSelected(item!.name);
+                    }}
+                    value={item!.name}
+                  >
+                    {item!.name}
+                  </TabsTrigger>
+                  <CloseButton name={item!.name} />
+                </Item>
+              </Slot>
+            )}
+          </ManagedSlot>
+        </Container>
+        <AddPageForm />
       </TabsList>
       {state.pages.map((page) => (
         <TabsContent key={page.name} value={page.name}>
@@ -90,8 +102,8 @@ function Toolbar() {
   const { undo, redo, pastStates, futureStates } =
     useEditorState.temporal.getState();
 
-  const canUndo = pastStates.length > 0;
-  const canRedo = futureStates.length > 0;
+  const canUndo = !!pastStates.length;
+  const canRedo = !!futureStates.length;
 
   return (
     <div className="my-2">

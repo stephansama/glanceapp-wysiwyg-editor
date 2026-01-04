@@ -1,6 +1,7 @@
 import * as React from "react";
-import type { Config, Swapy } from "swapy";
 import { createSwapy } from "swapy";
+
+import type { Config, Swapy } from "swapy";
 
 const containerContext = React.createContext<{
   swapy: Swapy | null;

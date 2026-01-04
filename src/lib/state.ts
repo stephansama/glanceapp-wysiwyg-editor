@@ -13,14 +13,17 @@ export type EditorState = GlobalSchema;
 export type EditorStateFunctions = {
   removePage: (name: string) => void;
   addPage: (props: PageSchema) => void;
+  updatePages: (props: Array<PageSchema>) => void;
 };
 
 export const useEditorState = create<EditorState & EditorStateFunctions>()(
   persist(
     temporal((set) => ({
-      ...set,
       pages: [],
       showFileImportDropover: false,
+      updatePages(pages) {
+        set(() => ({ pages }));
+      },
       addPage(page) {
         set((state) => ({ pages: [...state.pages, page] }));
       },

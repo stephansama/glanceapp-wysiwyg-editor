@@ -1,14 +1,11 @@
 import * as React from "react";
 
-type Children = React.ReactElement | Array<React.ReactElement>;
+export type CommonSwapyProps = { swapyKey: string };
 
 export function Handle({
   children,
   ...props
-}: {
-  children: Children;
-  className?: string;
-}) {
+}: React.HTMLProps<HTMLDivElement>) {
   return (
     <div {...props} data-swapy-handle>
       {children}
@@ -20,11 +17,7 @@ export function Item({
   children,
   swapyKey: key,
   ...props
-}: {
-  children: Children;
-  className?: string;
-  swapyKey: string;
-}) {
+}: React.HTMLProps<HTMLDivElement> & CommonSwapyProps) {
   return (
     <div {...props} data-swapy-item={key}>
       {children}
@@ -36,11 +29,7 @@ export function Slot({
   children,
   swapyKey: key,
   ...props
-}: {
-  children: Children;
-  className?: string;
-  swapyKey: string;
-}) {
+}: React.HTMLProps<HTMLDivElement> & CommonSwapyProps) {
   return (
     <div {...props} data-swapy-slot={key}>
       {children}
