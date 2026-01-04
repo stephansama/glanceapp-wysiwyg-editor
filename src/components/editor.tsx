@@ -7,8 +7,8 @@ import * as React from "react";
 
 import { AddPageForm } from "./add-page";
 import { Dropover } from "./dropover";
+import { Page } from "./page";
 
-import { Page } from "@/components/page";
 import {
   Container,
   Item,
@@ -26,7 +26,7 @@ function CloseButton({ name }: { name: string }) {
 
   React.useEffect(() => {
     container.swapy?.update();
-  }, [state.pages]);
+  }, [state.pages, container.swapy]);
 
   return (
     <Button
@@ -67,17 +67,19 @@ function Content() {
             {/* @ts-expect-error is right */}
             {({ slotId, item, itemId }) => (
               <Slot swapyKey={slotId} key={slotId}>
-                <Item swapyKey={itemId}>
-                  <TabsTrigger
-                    onClick={(_) => {
-                      setSelected(item!.name);
-                    }}
-                    value={item!.name}
-                  >
-                    {item!.name}
-                  </TabsTrigger>
-                  <CloseButton name={item!.name} />
-                </Item>
+                {item && (
+                  <Item swapyKey={itemId}>
+                    <TabsTrigger
+                      onClick={(_) => {
+                        setSelected(item.name);
+                      }}
+                      value={item.name}
+                    >
+                      {item.name}
+                    </TabsTrigger>
+                    <CloseButton name={item.name} />
+                  </Item>
+                )}
               </Slot>
             )}
           </ManagedSlot>
@@ -86,14 +88,9 @@ function Content() {
       </TabsList>
       {state.pages.map((page) => (
         <TabsContent key={page.name} value={page.name}>
-          {page.name}
+          <Page {...page} />
         </TabsContent>
       ))}
-      <TabsContent value="name0">
-        <Page />
-        Make changes to your account here.
-      </TabsContent>
-      <TabsContent value="password">Change your password here.</TabsContent>
     </Tabs>
   );
 }

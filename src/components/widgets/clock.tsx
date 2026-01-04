@@ -1,6 +1,5 @@
 import * as z from "zod";
 
-import { Handle } from "@/components/swapy";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -41,7 +40,7 @@ const formSchema = z.object({
 });
 
 // https://github.com/glanceapp/glance/blob/6c5b7a3f4cc409e31739b2914bb6636d08299126/docs/configuration.md#clock
-export function Clock() {
+export function Clock(props: ClockSchema) {
   const form = useAppForm({
     defaultValues: {
       title: "",
@@ -59,7 +58,6 @@ export function Clock() {
     <Dialog>
       <form
         onSubmit={(e) => {
-          console.log("submitted");
           e.preventDefault();
           e.stopPropagation();
           form.handleSubmit();
@@ -67,15 +65,7 @@ export function Clock() {
         className="space-y-6"
       >
         <DialogTrigger asChild>
-          <div className="h-40 w-full rounded-md p-4 relative bg-green-200">
-            <Handle>
-              <img
-                src="https://api.iconify.design/formkit:draghandle.svg"
-                alt=""
-              />
-            </Handle>
-            <Button variant="outline">Open Dialog</Button>
-          </div>
+          <Button variant="outline">{props.hourFormat}</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-125">
           <DialogHeader>

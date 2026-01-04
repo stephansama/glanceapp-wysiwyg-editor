@@ -51,9 +51,7 @@ export function ManagedSlot<T extends object>({
       container.swapy.onSwap((event) => {
         setSlotItemMap(event.newSlotItemMap.asArray);
       });
-    } else {
-      setRegisteredSwap(true);
-    }
+    } else setRegisteredSwap(true);
   }, [container, registeredSwap]);
 
   React.useEffect(() => {
@@ -62,13 +60,16 @@ export function ManagedSlot<T extends object>({
 
     if (slotKeys.length !== itemKeys.length) return;
 
-    if (JSON.stringify(slotKeys) !== JSON.stringify(itemKeys)) {
-      console.log({ slottedItems, items, slotItemMap });
-      updateItems(
-        slottedItems.map((item) => item.item).filter((x): x is T => Boolean(x)),
-      );
-    }
+    if (JSON.stringify(slotKeys) === JSON.stringify(itemKeys)) return;
+
+    const updatedItems = slottedItems
+      .map((item) => item.item)
+      .filter((x): x is T => Boolean(x));
+
+    updateItems(updatedItems);
   }, [slottedItems]);
 
-  return <div {...props}>{slottedItems.map(children)}</div>;
+  return (
+    <React.Fragment {...props}>{slottedItems.map(children)}</React.Fragment>
+  );
 }

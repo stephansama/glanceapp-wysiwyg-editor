@@ -4,8 +4,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@custom-variant swapy-highlighted (&:is([data-swapy-highlighted] *));
-@custom-variant swapy-dragging (&:is([data-swapy-dragging] *));
+@custom-variant swapy-highlighted (&:is([data-swapy-highlighted] ));
+@custom-variant swapy-dragging (&:is([data-swapy-dragging] ));
 
 body {
   @apply m-0;

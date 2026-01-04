@@ -1,16 +1,8 @@
 import { Link } from "@tanstack/react-router";
 
-import {
-  DownloadIcon,
-  HelpCircleIcon,
-  LucideSquareArrowOutUpRight,
-  SettingsIcon,
-} from "lucide-react";
 import * as React from "react";
 
-import { Export } from "./export";
-import { Import } from "./import";
-import { Settings } from "./settings";
+import { actions } from "./actions";
 
 import {
   Tooltip,
@@ -18,43 +10,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-const title = "Glance WYSIWYG Editor";
+const title = "Glance WYSIWYG Editor" as const;
 
 export type CommonActionProps = {
   commonStyles: string;
   children: React.ReactElement;
 };
-
-const actions = {
-  help: {
-    description: "open up glance documentation",
-    href: "https://github.com/glanceapp/glance/blob/6c5b7a3f4cc409e31739b2914bb6636d08299126/docs/configuration.md#configuring-glance",
-    Icon: () => <HelpCircleIcon />,
-  },
-  import: {
-    description: "import previous dashboard",
-    Icon: () => <DownloadIcon />,
-    Component: Import,
-  },
-  export: {
-    description: "export current dashboard",
-    Icon: () => <LucideSquareArrowOutUpRight />,
-    Component: Export,
-  },
-  settings: {
-    description: "settings for glance WYSIWIG",
-    Icon: () => <SettingsIcon />,
-    Component: Settings,
-  },
-} satisfies Record<
-  string,
-  Partial<{
-    description: string;
-    href?: string;
-    Icon?: () => React.ReactElement;
-    Component: (props: CommonActionProps) => React.ReactElement;
-  }>
->;
 
 export function Header() {
   return (
@@ -75,7 +36,7 @@ export function Header() {
             <TooltipTrigger asChild>
               {"Component" in action ? (
                 <div>
-                  <action.Component commonStyles="p-2 hover:bg-gray-700 rounded-lg transition-colors">
+                  <action.Component commonStyles="p-2 hover:bg-gray-700 cursor-pointer rounded-lg transition-colors">
                     <action.Icon />
                   </action.Component>
                 </div>

@@ -1,5 +1,7 @@
 import * as z from "zod";
 
+import { clockSchema } from "@/components/widgets/clock";
+
 export type AuthUserSchema = z.input<typeof authUserSchema>;
 export const authUserSchema = z.object({
   password: z.string(),
@@ -78,11 +80,16 @@ export const themeSchema = z
   }));
 
 export type WidgetsSchema = z.input<typeof widgetsSchema>;
-export const widgetsSchema = z.object({});
+export const widgetsSchema = clockSchema;
+
+export const SIZES = ["small", "full"] as const;
+
+export type SizeSchema = z.input<typeof sizeSchema>;
+export const sizeSchema = z.enum(SIZES);
 
 export type ColumnsSchema = z.input<typeof columnsSchema>;
 export const columnsSchema = z.object({
-  size: z.enum(["small", "full"]),
+  size: sizeSchema,
   widgets: z.array(widgetsSchema).optional(),
 });
 
